@@ -257,6 +257,11 @@ export const AppProvider = ({ children }) => {
     addToast(`Cập nhật trạng thái phòng thành công!`);
   };
 
+  const updateAccommodation = (id, updatedFields) => {
+    setAccommodations(accommodations.map(acc => acc.id === id ? { ...acc, ...updatedFields } : acc));
+    addToast('Cập nhật thông tin phòng thành công!');
+  };
+
   // --- SYSTEM UTILS: RESET / BACKUP ---
   const resetToDefaultData = () => {
     setBookings(initialBookings);
