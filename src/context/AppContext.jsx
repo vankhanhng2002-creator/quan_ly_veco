@@ -388,6 +388,7 @@ export const AppProvider = ({ children }) => {
     togglePricingStatus,
     deletePricingItem,
     updateAccommodationStatus,
+    updateAccommodation,
     resetToDefaultData,
     exportBackupJSON,
     importBackupJSON,
