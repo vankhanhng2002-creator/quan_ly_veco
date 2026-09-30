@@ -1,0 +1,39 @@
+========================================================================
+HỆ THỐNG QUẢN LÝ TRUNG TÂM SINH THÁI GIÁO DỤC V-ECO
+(ECO-EDUCATIONAL & EXPERIENTIAL CENTER MANAGEMENT SYSTEM)
+========================================================================
+
+CHÀO MỪNG BẠN ĐẾN VỚI THƯ MỤC TỔNG CỦA HỆ THỐNG V-ECO!
+
+Trong thư mục này bao gồm các file độc lập và hoàn chỉnh:
+
+1. FILE CHẠY ỨNG DỤNG TRỰC TIẾP:
+   📄 VECO_Phan_Mem_Quan_Ly.html
+   -> Đây là FILE TỔNG ĐỘC LẬP duy nhất tích hợp toàn bộ hệ thống!
+   -> Bạn chỉ cần NHẤP ĐÚP CHUỘT (Double click) vào file này để mở trên bất kỳ 
+      trình duyệt nào (Google Chrome, Microsoft Edge, Cốc Cốc, Safari...).
+   -> KHÔNG CẦN CÀI ĐẶT NODE.JS, không cần chạy dòng lệnh.
+   -> Toàn bộ dữ liệu bạn thêm, sửa, xóa sẽ được tự động lưu lại trên máy của bạn.
+
+2. FILE DỮ LIỆU SAO LƯU GỐC:
+   💾 Du_Lieu_Mau_Ban_Dau.json
+   -> Chứa toàn bộ dữ liệu mẫu chuẩn của V-ECO (Đoàn trường Vinschool, Đoàn Thị Điểm,
+      Sao Mai, các gói tour nông dân nhí, bảng giá, phòng bungalow...).
+   -> Dùng để khôi phục hoặc chuyển sang máy tính khác qua nút "Nhập File" trên menu.
+
+3. FILE BẢNG GIÁ EXCEL:
+   📊 Bang_Gia_Dich_Vu_VECO.csv
+   -> Chứa bảng giá niêm yết các gói dịch vụ, bạn có thể nhấp đúp để mở trực tiếp
+      bằng Microsoft Excel để in ấn hoặc xem offline.
+
+4. CÁC PHÂN HỆ QUẢN TRỊ TRONG PHẦN MỀM:
+   • 📊 Tổng quan điều hành: KPI doanh thu, chi phí, lợi nhuận ròng, công suất phòng.
+   • 📅 Quản lý đặt lịch: Lập hợp đồng đoàn trường, in phiếu xác nhận có dấu mộc, thu cọc.
+   • 💰 Quản lý chi tiêu & Ngân sách: Phiếu chi thực tế, cảnh báo hạn mức dự toán (70%, 90%).
+   • 🧭 Lịch trình hoạt động: Timeline từng trạm (bắt cá, vườn rau, làm bánh), phân công HDV.
+   • 🏷️ Bảng giá & Dịch vụ: 5 danh mục tour, lưu trú, ẩm thực, workshop, thuê thiết bị.
+   • 🧮 Báo giá nhanh: Tự tính miễn phí 1 giáo viên / 20 học sinh, chiết khấu đoàn đông.
+   • 🏡 Sơ đồ lưu trú: Trạng thái Bungalow ven suối, Nhà sàn Hoa Ban, Lều Glamping.
+
+Mọi thắc mắc kỹ thuật hoặc nhu cầu mở rộng tính năng, vui lòng liên hệ đội ngũ phát triển.
+========================================================================
