@@ -2,22 +2,42 @@ import React, { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import {
   BedDouble,
-  Home,
-  CheckCircle,
-  Clock,
-  Wrench,
-  User,
-  Users,
-  Sparkles,
-  ArrowRightLeft
+  Pencil,
+  X
 } from 'lucide-react';
 import { formatVND, getStatusBadge } from '../../utils/formatters';
 
 export const AccommodationStatusView = () => {
-  const { accommodations, updateAccommodationStatus } = useApp();
+  const { accommodations, updateAccommodationStatus, updateAccommodation } = useApp();
 
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [accommodationToEdit, setAccommodationToEdit] = useState(null);
+  const [editFormData, setEditFormData] = useState(null);
+
+  const openEditModal = (accommodation) => {
+    setAccommodationToEdit(accommodation);
+    setEditFormData({
+      code: accommodation.code || '',
+      name: accommodation.name || '',
+      type: accommodation.type || 'Bungalow',
+      capacity: accommodation.capacity || '',
+      pricePerNight: accommodation.pricePerNight || 0
+    });
+  };
+
+  const handleEditSubmit = (event) => {
+    event.preventDefault();
+    updateAccommodation(accommodationToEdit.id, {
+      ...editFormData,
+      code: editFormData.code.trim(),
+      name: editFormData.name.trim(),
+      capacity: editFormData.capacity.trim(),
+      pricePerNight: Number(editFormData.pricePerNight)
+    });
+    setAccommodationToEdit(null);
+    setEditFormData(null);
+  };
 
   // Filtered accommodations
   const filtered = accommodations.filter(acc => {
@@ -29,7 +49,6 @@ export const AccommodationStatusView = () => {
   const availableCount = accommodations.filter(a => a.status === 'available').length;
   const occupiedCount = accommodations.filter(a => a.status === 'occupied').length;
   const bookedCount = accommodations.filter(a => a.status === 'booked').length;
-  const maintenanceCount = accommodations.filter(a => a.status === 'maintenance').length;
   const occupancyPercent = Math.round(((occupiedCount + bookedCount) / accommodations.length) * 100);
 
   const handleQuickStatusChange = (id, newStatus) => {
@@ -137,20 +156,15 @@ export const AccommodationStatusView = () => {
           const badge = getStatusBadge(acc.status);
 
           let cardBorder = 'border-slate-200';
-          let bgHeader = 'bg-slate-50';
 
           if (acc.status === 'occupied') {
             cardBorder = 'border-indigo-300 ring-2 ring-indigo-100';
-            bgHeader = 'bg-indigo-50/70';
           } else if (acc.status === 'booked') {
             cardBorder = 'border-amber-300';
-            bgHeader = 'bg-amber-50/70';
           } else if (acc.status === 'available') {
             cardBorder = 'border-emerald-200';
-            bgHeader = 'bg-emerald-50/50';
           } else if (acc.status === 'maintenance') {
             cardBorder = 'border-rose-200';
-            bgHeader = 'bg-rose-50/50';
           }
 
           return (
@@ -164,9 +178,20 @@ export const AccommodationStatusView = () => {
                   <span className="text-xs font-black font-mono bg-slate-900 text-white px-2 py-0.5 rounded-md">
                     {acc.code}
                   </span>
-                  <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${badge.color}`}>
-                    {badge.label}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${badge.color}`}>
+                      {badge.label}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => openEditModal(acc)}
+                      title={`Chỉnh sửa ${acc.name}`}
+                      aria-label={`Chỉnh sửa ${acc.name}`}
+                      className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-800 hover:bg-emerald-50 cursor-pointer"
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
 
                 <div>
@@ -216,6 +241,106 @@ export const AccommodationStatusView = () => {
           );
         })}
       </div>
+
+      {accommodationToEdit && editFormData && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl border border-slate-200 overflow-hidden">
+            <div className="bg-emerald-800 text-white px-5 py-4 flex items-center justify-between">
+              <div>
+                <h2 className="font-bold">Chỉnh sửa thông tin phòng</h2>
+                <p className="text-xs text-emerald-100 mt-0.5">{accommodationToEdit.name}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setAccommodationToEdit(null); setEditFormData(null); }}
+                aria-label="Đóng"
+                className="p-1.5 rounded-lg hover:bg-emerald-700 text-emerald-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEditSubmit} className="p-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label className="text-sm font-semibold text-slate-700">
+                  Mã phòng *
+                  <input
+                    value={editFormData.code}
+                    onChange={(event) => setEditFormData({ ...editFormData, code: event.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 font-normal"
+                    required
+                  />
+                </label>
+                <label className="text-sm font-semibold text-slate-700">
+                  Loại phòng *
+                  <select
+                    value={editFormData.type}
+                    onChange={(event) => setEditFormData({ ...editFormData, type: event.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 font-normal"
+                    required
+                  >
+                    <option>Bungalow</option>
+                    <option>Nhà Sàn</option>
+                    <option>Glamping</option>
+                    <option>Nghỉ Trong Ngày</option>
+                  </select>
+                </label>
+              </div>
+
+              <label className="block text-sm font-semibold text-slate-700">
+                Tên phòng *
+                <input
+                  value={editFormData.name}
+                  onChange={(event) => setEditFormData({ ...editFormData, name: event.target.value })}
+                  className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 font-normal"
+                  required
+                />
+              </label>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <label className="text-sm font-semibold text-slate-700">
+                  Sức chứa *
+                  <input
+                    value={editFormData.capacity}
+                    onChange={(event) => setEditFormData({ ...editFormData, capacity: event.target.value })}
+                    placeholder="Ví dụ: 2-4 khách"
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 font-normal"
+                    required
+                  />
+                </label>
+                <label className="text-sm font-semibold text-slate-700">
+                  Giá mỗi đêm (VNĐ) *
+                  <input
+                    type="number"
+                    min="0"
+                    step="1000"
+                    value={editFormData.pricePerNight}
+                    onChange={(event) => setEditFormData({ ...editFormData, pricePerNight: event.target.value })}
+                    className="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 font-normal"
+                    required
+                  />
+                </label>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => { setAccommodationToEdit(null); setEditFormData(null); }}
+                  className="px-4 py-2 rounded-lg border border-slate-300 text-slate-700 font-semibold hover:bg-slate-50 cursor-pointer"
+                >
+                  Hủy
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-emerald-800 text-white font-semibold hover:bg-emerald-700 cursor-pointer"
+                >
+                  Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
